@@ -15,8 +15,8 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useCategoryData } from "../../hooks/useQuery";
-import { useSearchStore } from "../../store/searchStore";
+import { useCategoryData } from "../../../hooks/useQuery";
+import { useSearchStore } from "../../../store/searchStore";
 
 //categoty 상태
 const search = useSearchStore();

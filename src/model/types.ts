@@ -60,7 +60,7 @@ export interface FileData {
   save_path: string;
 }
 
-//글 update시 필요한한 데이터
+//글 update시 필요한 데이터
 export interface BoardUpdateData {
   board_no: number;
   category_cd: string;

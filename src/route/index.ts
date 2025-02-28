@@ -7,16 +7,13 @@ import BoardList from "./pages/BoardList.vue";
 import BoardDetail from "./pages/BoardDetail.vue";
 import BoardForm from "./pages/BoardForm.vue";
 import PwCheck from "./pages/PwCheck.vue";
+import Layout from "../components/layout/Layout.vue";
 // import App from "../App.vue";
 
 const routes: RouteRecordRaw[] = [
   {
-    //비번 체크
-    path: "/pwCheck/:board_no",
-    component: PwCheck,
-  },
-  {
     path: "/",
+    component: Layout,
     children: [
       {
         //게시판 list
@@ -45,6 +42,11 @@ const routes: RouteRecordRaw[] = [
         },
       },
     ],
+  },
+  {
+    //비번 체크
+    path: "/pwCheck/:board_no",
+    component: PwCheck,
   },
 ];
 

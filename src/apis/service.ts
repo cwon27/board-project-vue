@@ -153,7 +153,7 @@ export const passwordCheck = async (boardNo: number, password: string) => {
   return response.data;
 };
 
-//데이터 삭제
+//데이터 삭제 -> 모두! 그냥 삭제 버튼 눌렀을 때 삭제
 export const deleteData = async (boardNo: number) => {
   const response = await apiUrl.delete(`/board/delete/${boardNo}`);
 
@@ -210,7 +210,7 @@ export const deleteFile = async (save_path: string, file_no: number) => {
 };
 
 //Editor 이미지 업로드
-export const editorUploadImg = async (blob: File) => {
+export const editorUploadImg = async (blob: Blob | File) => {
   const formData = new FormData();
   formData.append("image", blob);
 
@@ -221,7 +221,6 @@ export const editorUploadImg = async (blob: File) => {
       },
     });
 
-    console.log(response.data);
     return response.data;
   } catch (e) {
     alert("이미지 업로드 중 오류가 발생했습니다.");

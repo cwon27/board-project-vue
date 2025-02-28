@@ -9,7 +9,7 @@
         <tr>
           <th>카테고리</th>
           <td>
-            <Category />
+            <CategoryList />
           </td>
         </tr>
         <tr>
@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useSearchStore } from "../../../store/searchStore";
-import Category from "../Category.vue";
+import CategoryList from "./CategoryList.vue";
 
 const search = useSearchStore();
 
