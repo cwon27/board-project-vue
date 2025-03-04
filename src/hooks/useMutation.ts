@@ -49,6 +49,7 @@ export const useDeleteFile = () => {
   });
 };
 
+//글 등록 & 수정
 export const useWrite = (isUpdate: boolean, initialBoard: BoardDetail) => {
   return useMutation({
     mutationFn: ({
