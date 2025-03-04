@@ -49,13 +49,15 @@ export const useDeleteFile = () => {
   });
 };
 
-export const useWrite = (
-  isUpdate: boolean,
-  initialBoard: BoardDetail,
-  files: Array<{ file: File | null }>
-) => {
+export const useWrite = (isUpdate: boolean, initialBoard: BoardDetail) => {
   return useMutation({
-    mutationFn: (formData: BoardData) => {
+    mutationFn: ({
+      formData,
+      files,
+    }: {
+      formData: BoardData;
+      files: Array<{ file: File | null }>;
+    }) => {
       const filterdFile = files
         .map((item) => item.file)
         .filter((file): file is File => file !== null);

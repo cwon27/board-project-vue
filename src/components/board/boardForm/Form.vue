@@ -69,7 +69,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 import type { BoardDetail, FileData, FileItem } from "../../../model/types";
 import { useSearchStore } from "../../../store/searchStore";
 import ToastEditor from "./ToastEditor.vue";
@@ -100,6 +100,10 @@ const formData = reactive({
 //파일 데이터 관리
 //백엔드로 넘겨줄 파일
 const files = ref<FileItem[]>([{ file: null }]);
+// files가 업데이트될 때마다 로그 출력
+watch(files, (newFiles) => {
+  console.log("files 변경됨:", newFiles);
+});
 //기존 파일
 const existingFiles = ref<FileData[]>([]);
 
@@ -120,19 +124,10 @@ onMounted(() => {
   }
 });
 
-//파일 변경
-const handleFileChange = (newFiles: FileItem[]) => {
-  files.value = newFiles;
-};
-
-//글, 파일 저장 & 수정 api 호출
-const { mutate: writeMutaion } = useWrite(
-  props.isUpdate,
-  props.initialBoard,
-  files.value
-);
-
 const router = useRouter();
+
+//글, 파일 저장 & 수정 api
+const { mutate: writeMutaion } = useWrite(props.isUpdate, props.initialBoard);
 
 //글, 파일 저장 &  수정
 const handleSubmit = () => {
@@ -177,28 +172,36 @@ const handleSubmit = () => {
   const isConfirm = window.confirm("글을 저장하시겠습니까?");
   if (!isConfirm) return;
 
-  writeMutaion(formData, {
-    onSuccess: (response) => {
-      if (response.success) {
-        alert(props.isUpdate ? "글이 수정되었습니다." : "글이 저장되었습니다.");
-        //검색 조건 초기화
-        search.resetSearch();
-        //목록으로 이동
-        if (!props.isUpdate) {
-          router.push("/list");
+  writeMutaion(
+    //객체 형태로 전달
+    { formData, files: files.value },
+    {
+      onSuccess: (response) => {
+        if (response.success) {
+          alert(
+            props.isUpdate ? "글이 수정되었습니다." : "글이 저장되었습니다."
+          );
+          //검색 조건 초기화
+          search.resetSearch();
+          //목록으로 이동
+          if (!props.isUpdate) {
+            router.push("/list");
+          } else {
+            router.push(`/detail/${props.initialBoard.board_no}`);
+          }
         } else {
-          router.push(`/detail/${props.initialBoard.board_no}`);
+          alert(
+            props.isUpdate
+              ? "글 수정을 실패했습니다."
+              : "글 저장을 실패했습니다."
+          );
         }
-      } else {
-        alert(
-          props.isUpdate ? "글 수정을 실패했습니다." : "글 저장을 실패했습니다."
-        );
-      }
-    },
-    onError: (error) => {
-      alert("글 등록 & 수정 실패" + error.message);
-    },
-  });
+      },
+      onError: (error) => {
+        alert("글 등록 & 수정 실패" + error.message);
+      },
+    }
+  );
 };
 
 //저장 버튼 클릭

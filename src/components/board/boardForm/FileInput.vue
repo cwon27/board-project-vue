@@ -38,9 +38,7 @@ const props = defineProps<{
   isUpdate: boolean;
 }>();
 
-const emit = defineEmits<{
-  (e: "update:modelValue", newFiles: FileItem[]): void;
-}>();
+const emit = defineEmits(["update:modelValue"]);
 
 //여기서 사용하는 파일 상태
 const files = ref<FileItem[]>(props.modelValue || [{ file: null }]);
@@ -67,12 +65,8 @@ watch(
         file: item.file === null ? new File([], "") : item.file,
       }));
 
-      files.value = filterdFile;
-
-      //부모한테 전송
-      watch(files, (fileData) => {
-        emit("update:modelValue", fileData);
-      });
+      console.log("부모에게 전달할 파일 리스트:", filterdFile);
+      emit("update:modelValue", filterdFile);
     }
   }
 );
@@ -83,12 +77,12 @@ const handleFileChange = (i: number, e: Event) => {
 
   //파일 선택되면?
   if (input.files && input.files[0]) {
-    const newFiles = [...files.value];
+    let newFiles = [...files.value];
     newFiles[i] = { file: input.files[0] };
 
     //파일 3개까지 첨부 가능
     if (newFiles.length < 3 && !newFiles.some((item) => item.file === null)) {
-      newFiles.push({ file: null });
+      newFiles = [...newFiles, { file: null }];
     }
 
     files.value = newFiles;
@@ -99,12 +93,8 @@ const handleFileChange = (i: number, e: Event) => {
       file: item.file === null ? new File([], "") : item.file,
     }));
 
-    files.value = filterdFile;
-
-    //부모한테 전송
-    watch(files, (fileData) => {
-      emit("update:modelValue", fileData);
-    });
+    console.log("부모에게 전달할 파일 리스트:", filterdFile);
+    emit("update:modelValue", filterdFile);
   }
 };
 
@@ -158,7 +148,7 @@ const updateFileList = (i: number) => {
 
   //파일 3개까지 첨부 가능
   if (newFiles.length < 3 && !newFiles.some((item) => item.file === null)) {
-    newFiles.push({ file: null });
+    newFiles = [...newFiles, { file: null }];
   }
 
   files.value = newFiles;
@@ -166,11 +156,6 @@ const updateFileList = (i: number) => {
   //file이 null인 값 보내면 안됨
   const filterdFile = newFiles.filter((item) => item.file !== null);
 
-  files.value = filterdFile;
-
-  //부모한테 전송
-  watch(files, (fileData) => {
-    emit("update:modelValue", fileData);
-  });
+  emit("update:modelValue", filterdFile);
 };
 </script>
