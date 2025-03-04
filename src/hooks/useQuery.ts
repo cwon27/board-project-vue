@@ -7,6 +7,7 @@ import {
   getFileData,
   viewCount,
 } from "../apis/service";
+import { computed } from "vue";
 
 //카테고리 값 가져오기
 export const useCategoryData = () => {
@@ -18,13 +19,14 @@ export const useCategoryData = () => {
 
 //검색조건으로 list 가져오기
 export const useBoardList = (search: SearchData) => {
+  const queryKey = computed(() => [
+    "boardList",
+    search.sortType,
+    search.pageSize,
+    search.page,
+  ]);
   return useQuery({
-    queryKey: () => [
-      "boardList",
-      search.sortType,
-      search.pageSize,
-      search.page,
-    ],
+    queryKey,
     queryFn: () => getBoard(search),
   });
 };
