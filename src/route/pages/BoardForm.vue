@@ -4,8 +4,8 @@
   <Form
     v-else
     :isUpdate="isUpdate"
-    :initialBoard="data?.boardDetail"
-    :initialFile="data?.fileData"
+    :initialBoard="data?.boardDetail || []"
+    :initialFile="data?.fileData || []"
   />
 </template>
 <script setup lang="ts">

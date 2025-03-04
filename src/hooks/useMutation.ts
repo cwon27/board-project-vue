@@ -62,10 +62,6 @@ export const useWrite = (isUpdate: boolean, initialBoard: BoardDetail) => {
         .map((item) => item.file)
         .filter((file): file is File => file !== null);
 
-      console.log(files);
-      console.log(filterdFile);
-      console.log(formData);
-
       if (isUpdate) {
         if (!initialBoard.board_no) {
           throw new Error("게시글 번호가 없습니다.");

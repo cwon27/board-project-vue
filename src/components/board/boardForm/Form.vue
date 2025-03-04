@@ -15,6 +15,7 @@
             class="input block"
             v-model="formData.writer_nm"
             :readonly="isUpdate"
+            ref="writerRef"
           />
         </td>
         <th class="fir">비밀번호 <i class="req">*</i></th>
@@ -24,6 +25,7 @@
             class="input block"
             v-model="formData.password"
             :readonly="isUpdate"
+            ref="passwordRef"
           />
         </td>
       </tr>
@@ -41,6 +43,7 @@
             class="input"
             style="width: 100%"
             v-model="formData.title"
+            ref="titleRef"
           />
         </td>
       </tr>
@@ -69,7 +72,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import type { BoardDetail, FileData, FileItem } from "../../../model/types";
 import { useSearchStore } from "../../../store/searchStore";
 import ToastEditor from "./ToastEditor.vue";
@@ -100,10 +103,6 @@ const formData = reactive({
 //파일 데이터 관리
 //백엔드로 넘겨줄 파일
 const files = ref<FileItem[]>([{ file: null }]);
-// files가 업데이트될 때마다 로그 출력
-watch(files, (newFiles) => {
-  console.log("files 변경됨:", newFiles);
-});
 //기존 파일
 const existingFiles = ref<FileData[]>([]);
 
@@ -124,7 +123,14 @@ onMounted(() => {
   }
 });
 
+//URL 이동을 위한 router
 const router = useRouter();
+
+//focus를 위한 ref 설정
+const writerRef = ref<HTMLInputElement | null>(null);
+const passwordRef = ref<HTMLInputElement | null>(null);
+// const categoryRef = ref<{ focus: () => void } | null>(null);
+const titleRef = ref<HTMLInputElement | null>(null);
 
 //글, 파일 저장 & 수정 api
 const { mutate: writeMutaion } = useWrite(props.isUpdate, props.initialBoard);
@@ -138,6 +144,7 @@ const handleSubmit = () => {
     (!formData.writer_nm.trim() || formData.writer_nm.length > 50)
   ) {
     alert("작성자를 다시 입력해주세요! (필수로 입력, 50자 이내)");
+    writerRef.value?.focus();
     return;
   }
   //비번
@@ -146,6 +153,7 @@ const handleSubmit = () => {
     (!formData.password.trim() || formData.password.length > 100)
   ) {
     alert("비밀번호를 다시 입력해주세요! (필수로 입력, 100자 이내)");
+    passwordRef.value?.focus();
     return;
   }
   //3. 카테고리
@@ -156,6 +164,7 @@ const handleSubmit = () => {
   //4. 제목
   if (!formData.title.trim() || formData.title.length > 200) {
     alert("제목을 다시 입력해주세요! (필수로 입력, 200자 이내)");
+    titleRef.value?.focus();
     return;
   }
   //5. 내용

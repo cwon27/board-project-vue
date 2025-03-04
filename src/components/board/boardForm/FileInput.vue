@@ -65,7 +65,6 @@ watch(
         file: item.file === null ? new File([], "") : item.file,
       }));
 
-      console.log("부모에게 전달할 파일 리스트:", filterdFile);
       emit("update:modelValue", filterdFile);
     }
   }
@@ -93,7 +92,6 @@ const handleFileChange = (i: number, e: Event) => {
       file: item.file === null ? new File([], "") : item.file,
     }));
 
-    console.log("부모에게 전달할 파일 리스트:", filterdFile);
     emit("update:modelValue", filterdFile);
   }
 };

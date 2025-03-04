@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { nextTick, ref, watch } from "vue";
 import { useCategoryData } from "../../../hooks/useQuery";
 
 //props
@@ -42,4 +42,16 @@ watch(
     selectedCategory.value = newCategory;
   }
 );
+
+//focus
+// const categoryRef = ref<HTMLSelectElement | null>(null);
+
+// //부모에서 focus 사용할 수 있도록 하기
+// const focus = () => {
+//   console.log("categoryFocus 실행됨!" + categoryRef.value);
+//   categoryRef.value?.focus();
+// };
+
+// //자식에서 선언된 함수 부모에서 사용할 수 있도록 해주는 함수(vue3)
+// defineExpose({ focus });
 </script>

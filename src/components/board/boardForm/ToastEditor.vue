@@ -51,7 +51,6 @@ watch(
   () => props.modelValue,
   (newCont) => {
     if (editorInstance && newCont !== editorInstance.getHTML()) {
-      console.log(newCont);
       editorInstance?.setHTML(newCont);
     }
   }
