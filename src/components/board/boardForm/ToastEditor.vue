@@ -25,7 +25,7 @@ let editorInstance: Editor | null = null;
 onMounted(() => {
   editorInstance = new Editor({
     //여기서 Editor 인스턴스가 생성됨됨
-    el: editor.value, // 실제 DOM 요소를 가져와서 Editor 인스턴스 생성함함
+    el: editor.value, // 실제 DOM 요소를 가져와서 Editor 인스턴스 생성함
     height: "400px",
     initialEditType: "wysiwyg",
     placeholder: "내용을 입력해주세요.",
@@ -64,4 +64,11 @@ const onUploadImage = async (
   const response = await editorUploadImg(blob);
   callback(response, "image");
 };
+
+//focus
+const editorFocus = () => {
+  editorInstance?.focus();
+};
+
+defineExpose({ editorFocus });
 </script>

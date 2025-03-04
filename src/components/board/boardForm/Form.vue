@@ -32,7 +32,7 @@
       <tr>
         <th class="fir">카테고리 <i class="req">*</i></th>
         <td colspan="3">
-          <CategoryForm v-model="formData.category_cd" />
+          <CategoryForm v-model="formData.category_cd" ref="categoryRef" />
         </td>
       </tr>
       <tr>
@@ -50,13 +50,14 @@
       <tr>
         <th class="fir">내용 <i class="req">*</i></th>
         <td colspan="3">
-          <ToastEditor v-model="formData.cont" />
+          <ToastEditor v-model="formData.cont" ref="editorRef" />
         </td>
       </tr>
       <FileInput
         v-model="files"
         :existingFiles="existingFiles"
         :isUpdate="isUpdate"
+        ref="fileRef"
       />
     </tbody>
   </table>
@@ -72,7 +73,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import type { BoardDetail, FileData, FileItem } from "../../../model/types";
 import { useSearchStore } from "../../../store/searchStore";
 import ToastEditor from "./ToastEditor.vue";
@@ -129,8 +130,10 @@ const router = useRouter();
 //focus를 위한 ref 설정
 const writerRef = ref<HTMLInputElement | null>(null);
 const passwordRef = ref<HTMLInputElement | null>(null);
-// const categoryRef = ref<{ focus: () => void } | null>(null);
+const categoryRef = ref<{ categoryFocus: () => void } | null>(null);
 const titleRef = ref<HTMLInputElement | null>(null);
+const editorRef = ref<{ editorFocus: () => void } | null>(null);
+const fileRef = ref<{ fileFocus: () => void } | null>(null);
 
 //글, 파일 저장 & 수정 api
 const { mutate: writeMutaion } = useWrite(props.isUpdate, props.initialBoard);
@@ -159,6 +162,7 @@ const handleSubmit = () => {
   //3. 카테고리
   if (formData.category_cd == "ALL") {
     alert("카테고리 타입을 선택하세요!");
+    categoryRef.value?.categoryFocus();
     return;
   }
   //4. 제목
@@ -170,11 +174,13 @@ const handleSubmit = () => {
   //5. 내용
   if (!formData.cont.trim()) {
     alert("내용을 입력해주세요! (필수로 입력)");
+    editorRef.value?.editorFocus();
     return;
   }
   //6.첨부파일 1개 이상
   if (!files.value[0]?.file) {
     alert("파일은 1개 이상 선택해주세요!");
+    fileRef.value?.fileFocus();
     return;
   }
 

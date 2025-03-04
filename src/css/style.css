@@ -284,7 +284,7 @@ input[type="file"] {
 }
 input[type="text"]:focus,
 input[type="password"]:focus {
-  border-color: #6685a4;
+  border: 2px solid #6685a4;
 }
 input[type="image"] {
   border: none;
@@ -362,6 +362,9 @@ select.select {
   line-height: 1\0 / IE8 + 9;
   border: #c2c4ca 1px solid;
   box-shadow: none;
+}
+select.select:focus {
+  border: 2px solid #6685a4;
 }
 select::-ms-expand,
 select.select::-ms-expand {
@@ -3061,6 +3064,10 @@ img.new {
   cursor: pointer;
 }
 
+#file-0:focus + .file-label {
+  border: 2px solid #6685a4;
+}
+
 .file-del-btn {
   padding: 5px;
   border: 0;
@@ -3081,7 +3088,8 @@ img.new {
   margin: 5px 0;
 }
 
-input.readonly {
-  border: none !important;
-  background-color: #eeeeee;
+input[type="text"]:read-only,
+input[type="password"]:read-only {
+  border: none;
+  background-color: #fff;
 }

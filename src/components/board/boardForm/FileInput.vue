@@ -16,9 +16,10 @@
       <template v-else>
         <input
           type="file"
-          style="display: none"
+          style="opacity: 0; width: 0; position: absolute"
           :id="`file-${i}`"
           @change="handleFileChange(i, $event)"
+          ref="fileRef"
         />
         <label :for="`file-${i}`" class="file-label">파일 선택</label>
       </template>
@@ -156,4 +157,14 @@ const updateFileList = (i: number) => {
 
   emit("update:modelValue", filterdFile);
 };
+
+//focus
+const fileRef = ref<(HTMLInputElement | null)[]>([]);
+
+const fileFocus = () => {
+  fileRef.value[0]?.focus();
+  console.log(fileRef.value[0]);
+};
+
+defineExpose({ fileFocus });
 </script>

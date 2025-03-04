@@ -1,7 +1,13 @@
 <template>
   <p v-if="isLoading">로딩중...</p>
   <p v-else-if="error">카테고리 값 가져오는데 에러 발생</p>
-  <select v-else v-model="selectedCategory" class="select" style="width: 150px">
+  <select
+    v-else
+    v-model="selectedCategory"
+    class="select"
+    style="width: 150px"
+    ref="categoryRef"
+  >
     <option value="ALL">전체</option>
     <option
       v-for="category in categories"
@@ -14,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { useCategoryData } from "../../../hooks/useQuery";
 
 //props
@@ -44,14 +50,13 @@ watch(
 );
 
 //focus
-// const categoryRef = ref<HTMLSelectElement | null>(null);
+const categoryRef = ref<HTMLSelectElement | null>(null);
 
-// //부모에서 focus 사용할 수 있도록 하기
-// const focus = () => {
-//   console.log("categoryFocus 실행됨!" + categoryRef.value);
-//   categoryRef.value?.focus();
-// };
+//부모에서 focus 사용할 수 있도록 하기
+const categoryFocus = () => {
+  categoryRef.value?.focus();
+};
 
-// //자식에서 선언된 함수 부모에서 사용할 수 있도록 해주는 함수(vue3)
-// defineExpose({ focus });
+//자식에서 선언된 함수 부모에서 사용할 수 있도록 해주는 함수(vue3)
+defineExpose({ categoryFocus });
 </script>
